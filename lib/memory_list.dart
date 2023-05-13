@@ -18,7 +18,7 @@ class  MemoryList extends StateNotifier<List<int>> {
   // ------->
   void addItemToRight(int num) {
     if (direction == Direction.right) {
-      if (previousIndex == 9) {
+      if (previousIndex == (memoryListSize-1)) {
         previousIndex = 0;
         state[previousIndex] = num;
       } else {
@@ -35,7 +35,7 @@ class  MemoryList extends StateNotifier<List<int>> {
   void addItemToLeft(int num) {
     if (direction == Direction.left) {
       if (previousIndex == 0) {
-        previousIndex = 9;
+        previousIndex = (memoryListSize-1);
         state[previousIndex] = num;
       } else {
         previousIndex--;
