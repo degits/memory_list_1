@@ -1,6 +1,6 @@
 # memory_list_1
 
-A flutter project for demostrating passive memorylist working.
+A Circular fixed size buffer demostration.
 
 ## Concepts
 
