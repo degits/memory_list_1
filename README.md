@@ -1,16 +1,10 @@
 # memory_list_1
 
-A new Flutter project.
+A flutter project for demostrating passive memorylist working.
 
-## Getting Started
+## Concepts
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. This memoryList (buffer) is circular buffer. In here at the bottom layer we use List as our buffer and later using some short of algorithmic logics this will abstracted to Circular buffer.
+2. This is the memory (buffer) section of our lazy image loader package.
+(Lazy image loader is a new image loading package that simultaneously work with main lazy loader.)
+3. This concept is very helpful to keep constant memory for images throughout tha application. and also giving unloadable smooth experience for the users.
