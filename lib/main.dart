@@ -37,7 +37,6 @@ class HomePage extends ConsumerStatefulWidget{
 
 class _HomePageState extends ConsumerState<ConsumerStatefulWidget> {
 
-int count = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +46,8 @@ int count = 0;
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //Text("${ref.read(memoryListProvider.notifier).previousIndex}"),
-            //Text("${ref.watch(memoryListProvider)}"),
+            Text("${ref.read(memoryListProvider.notifier).previousIndex}"),
+            Text("${ref.watch(memoryListProvider)}"),
           ],
         )
       ),
@@ -60,14 +59,14 @@ int count = 0;
             child: const Icon(Icons.plus_one),
             onPressed: () {
               count++;
-              ref.read(memoryListProvider).addItemToRight(Uint8List(1));
+              ref.read(memoryListProvider.notifier).addItemToRight(5);
             }
           ),
           FloatingActionButton(
             child: const Icon(Icons.minimize),
             onPressed: () {
               count--;
-              ref.read(memoryListProvider).addItemToLeft(Uint8List(3));
+              ref.read(memoryListProvider.notifier).addItemToLeft(0);
             }
           ),
         ]
