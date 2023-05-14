@@ -1,58 +1,117 @@
+import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const memoryListSize = 12;
-
-final memoryListProvider = StateNotifierProvider((ref) => MemoryList(List.filled(memoryListSize, -1)));
+// Only one MemoryList instance throughout app life time.
+// Instead it mutiplying the memory usage for memoryList. Thats why use provider
+final memoryListProvider = Provider((ref) => MemoryList(memoryListSize: 10)); 
 
 enum Direction {right, left}
 
-class  MemoryList extends StateNotifier<List<int>> {
-  MemoryList(super.state);
+abstract class Result {
+  Result({required this.index});
+  final int index;
+}
 
-  Direction direction = Direction.right;
+class Filled extends Result {
+  Filled({required int index}) : super(index: index);
+}
+
+class UnFilled extends Result {
+  UnFilled({required int index}) : super(index: index);
+}
+
+class MemoryList {
+  MemoryList({required this.memoryListSize}) 
+  : imageMemoryList = List.filled(memoryListSize, Uint8List(0));
+
+  final int memoryListSize;
+
+  List<Uint8List> imageMemoryList; // = List.filled(memoryListSize, Uint8List(0));
+
+  Direction previousDirection = Direction.right;
 
   bool isMemoryListFilled = false;
 
-  int previousIndex = -1;
+  Result previousResult = UnFilled(index: -1);
+  
+
   // ------->
-  void addItemToRight(int num) {
-    if (direction == Direction.right) {
-      if (previousIndex == (memoryListSize-1)) {
-        previousIndex = 0;
-        state[previousIndex] = num;
-        state = state.toList();
+  Result addItemToRight(Uint8List image) {
+    
+    if (previousDirection == Direction.right) {
+      previousDirection = Direction.right;
+      if (previousResult.index == (memoryListSize-1)) {
+        /** */
+        //if (previousResult is UnFilled) {
+        // fill status doenst matter return is Filled
+        previousResult = Filled(index: 0);
+        imageMemoryList[previousResult.index] = image;
+        print(imageMemoryList);
+        return previousResult;
+        /** */
       } else {
-        previousIndex++;
-        state[previousIndex] = num;
-        state = state.toList();
+        if (previousResult is UnFilled) {
+          previousResult = UnFilled(index: previousResult.index + 1); //previousDirection not changed
+          imageMemoryList[previousResult.index] = image;
+          print(imageMemoryList);
+          return previousResult;
+        } else {
+          previousResult = Filled(index: previousResult.index + 1); //previousDirection not changed
+          imageMemoryList[previousResult.index] = image;
+          print(imageMemoryList);
+          return previousResult;
+        }
       }
     } else {
-      state[previousIndex] = num;
-      state = state.toList();
+      previousDirection = Direction.right;
+      if (previousResult is UnFilled) {
+        previousResult = UnFilled(index: previousResult.index); //previousDirection not changed
+        imageMemoryList[previousResult.index] = image;
+        print(imageMemoryList);
+        return previousResult;
+      } else {
+        previousResult = Filled(index: previousResult.index); //previousDirection not changed
+        imageMemoryList[previousResult.index] = image;
+        print(imageMemoryList);
+        return previousResult;
+      }
     }
-    direction = Direction.right;
-    print(state);
   }
 
-  // <---------
-  void addItemToLeft(int num) {
-    if (direction == Direction.left) {
-      if (previousIndex == 0) {
-        previousIndex = (memoryListSize-1);
-        state[previousIndex] = num;
-        state = state.toList();
+
+    //!  No Needed to check for UnFilled Status , Bcz Left only enabled after Filled.
+    //! So no Unfilled can have, if have its a bug
+    Result addItemToLeft(Uint8List image) {
+    if (previousDirection == Direction.left) {
+      previousDirection = Direction.left;
+      if (previousResult.index == 0) {
+        /** */
+        //if (previousResult is UnFilled) {
+        // fill status doenst matter return is Filled
+        previousResult = Filled(index: (memoryListSize-1));
+        imageMemoryList[previousResult.index] = image;
+        print(imageMemoryList);
+        return previousResult;
+        /** */
       } else {
-        previousIndex--;
-        state[previousIndex] = num;
-        state = state.toList();
+        previousResult = Filled(index: previousResult.index - 1); //previousDirection not changed
+        imageMemoryList[previousResult.index] = image;
+        print(imageMemoryList);
+        return previousResult;
       }
     } else {
-      state[previousIndex] = num;
-      state = state.toList();
+      previousDirection = Direction.left;
+        previousResult = Filled(index: previousResult.index); //previousDirection not changed
+        imageMemoryList[previousResult.index] = image;
+        print(imageMemoryList);
+        return previousResult;
+      }
     }
-    direction = Direction.left;
-    print(state);
-  }
+
+    void reset() {
+      previousResult = UnFilled(index: -1);
+      imageMemoryList = List.filled(memoryListSize, Uint8List(0));
+      print(imageMemoryList);
+    }
 }
-
 
