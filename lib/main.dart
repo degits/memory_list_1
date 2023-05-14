@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:memory_list_1/memory_list.dart';
@@ -35,7 +37,6 @@ class HomePage extends ConsumerStatefulWidget{
 
 class _HomePageState extends ConsumerState<ConsumerStatefulWidget> {
 
-int count = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +46,8 @@ int count = 0;
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("${ref.read(memoryListProvider.notifier).previousIndex}"),
-            Text("${ref.watch(memoryListProvider)}"),
+            Text("${ref.watch(memoryListProvider.notifier).imageMemoryList}"),
+            //Text("${ref.watch(memoryListProvider)}"),
           ],
         )
       ),
@@ -57,15 +58,14 @@ int count = 0;
           FloatingActionButton(
             child: const Icon(Icons.plus_one),
             onPressed: () {
-              count++;
-              ref.read(memoryListProvider.notifier).addItemToRight(5);
+              ref.read(memoryListProvider.notifier).addItemToRight(Uint8List(2));
             }
           ),
           FloatingActionButton(
             child: const Icon(Icons.minimize),
             onPressed: () {
-              count--;
-              ref.read(memoryListProvider.notifier).addItemToLeft(0);
+              
+              ref.read(memoryListProvider.notifier).addItemToLeft(Uint8List(3));
             }
           ),
         ]
